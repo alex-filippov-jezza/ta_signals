@@ -1,19 +1,16 @@
 import pandas as pd
+import talib
 
 
 def macd_build(data, fast_period, slow_period, signal_period):
     # Рассчитываем MACD индикатор
-    exp1 = data['Close'].ewm(span=fast_period, adjust=False).mean()
-    exp2 = data['Close'].ewm(span=slow_period, adjust=False).mean()
-    macd = exp1 - exp2
-
-    # Рассчитываем сигнальную линию для MACD
-    signal = macd.ewm(span=signal_period, adjust=False).mean()
+    macd, signal, _ = talib.MACD(data['Close'], fastperiod=fast_period, slowperiod=slow_period,
+                                 signalperiod=signal_period)
 
     return macd, signal
 
 
 def ma_build(data, ma_period):
-    ma = data['Close'].rolling(window=ma_period).mean()
+    ma = talib.EMA(data['Close'], timeperiod=20)
 
     return ma
