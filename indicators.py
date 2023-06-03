@@ -11,6 +11,6 @@ def macd_build(data, fast_period, slow_period, signal_period):
 
 
 def ma_build(data, ma_period):
-    ma = talib.EMA(data['Close'], timeperiod=20)
+    ma = talib.EMA(data['Close'], timeperiod=ma_period)
 
     return ma

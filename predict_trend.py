@@ -1,11 +1,14 @@
 import pandas as pd
-from indicators import macd_build
-from optimal_parameters import find_optimal_macd_parameters
+from indicators import macd_build, ma_build
+from optimal_parameters import find_optimal_macd_parameters, find_optimal_ema_parameters
 
 
-def predict_trend_ma(data, ma_period):
+def predict_trend_ma(data):
     # Рассчитываем скользящее среднее
-    ma = data['Close'].rolling(window=ma_period).mean()
+
+    ma_period = find_optimal_ema_parameters(data)
+
+    ma = ma_build(data, ma_period)
 
     # Определяем направление тренда на основе расположения цены относительно скользящей средней
     if data['Close'].iloc[-1] > ma.iloc[-1]:
@@ -24,8 +27,6 @@ def predict_trend_macd(data):
     # Рассчитываем MACD индикатор
     macd, signal = macd_build(data, fast, slow, signal)
 
-
-
     # Определяем направление тренда на основе расположения MACD линии и сигнальной линии
     if macd.iloc[-1] > signal.iloc[-1]:
         trend_direction = 'Uptrend'
@@ -37,8 +38,8 @@ def predict_trend_macd(data):
     return trend_direction
 
 
-def predict_trend(data, ma_period):
-    ma_trend = predict_trend_ma(data, ma_period)
+def predict_trend(data):
+    ma_trend = predict_trend_ma(data)
     macd_trend = predict_trend_macd(data)
 
     if ma_trend == macd_trend:
@@ -47,5 +48,3 @@ def predict_trend(data, ma_period):
         trend_direction = 'Sideways'
 
     return trend_direction
-
-
