@@ -1,5 +1,6 @@
 import pandas as pd
 import talib
+import numpy as np
 
 
 def macd_build(data, fast_period, slow_period, signal_period):
@@ -14,3 +15,11 @@ def ma_build(data, ma_period):
     ma = talib.EMA(data['Close'], timeperiod=ma_period)
 
     return ma
+
+
+def bollinger_bands(data):
+    period = 20
+
+    upper, middle, lower = talib.BBANDS(data['Close'], timeperiod=period, nbdevup=2, nbdevdn=2, matype=0)
+
+    return upper, middle, lower
