@@ -4,8 +4,8 @@ from indicators import macd_build, ma_build
 
 
 def find_optimal_macd_parameters(data):
-    fast_period_range = (2, 100)
-    slow_period_range = (2, 100)
+    fast_period_range = (2, 200)
+    slow_period_range = (2, 200)
     signal_period_range = (1, 50)
     """
     Функция для автоматического подбора оптимальных параметров для MACD.
@@ -20,7 +20,7 @@ def find_optimal_macd_parameters(data):
         for slow in range(slow_period_range[0], slow_period_range[1] + 1):
             for signal in range(signal_period_range[0], signal_period_range[1] + 1):
 
-                if slow > fast * 2:
+                if slow == fast * 2:
                     # Вычисляем MACD со всеми возможными значениями параметров
                     macd, macdsignal = macd_build(data, fast, slow, signal)
 
